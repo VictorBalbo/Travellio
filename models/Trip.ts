@@ -5,6 +5,6 @@ export interface Trip {
   name: string;
   startDate: Date;
   endDate: Date;
-  destinations: Destination[];
-  transportations: Transportation[];
+  destinations?: Destination[];
+  transportations?: Transportation[];
 }

@@ -1,19 +1,15 @@
-import { useEffect, useState } from "react";
-import { Dimensions, ScaledSize } from "react-native";
+import { useCallback, useState } from "react";
+import { LayoutChangeEvent } from "react-native";
 
-export function useResponsiveDimensions() {
-  const [dimensions, setDimensions] = useState(Dimensions.get("window"));
+export function useDimensions() {
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
-  useEffect(() => {
-    const onChange = ({ window }: { window: ScaledSize }) => {
-      setDimensions(window);
-      console.log("Dimensions changed:", window.width);
-    };
+  const onDimensionsChange = useCallback((event: LayoutChangeEvent) => {
+    const { width, height } = event.nativeEvent.layout;
+    console.log("onDimensionsChange", width, height);
 
-    const subscription = Dimensions.addEventListener("change", onChange);
-
-    return () => subscription?.remove?.();
+    setDimensions({ width, height });
   }, []);
 
-  return dimensions;
+  return { dimensions, onDimensionsChange };
 }
