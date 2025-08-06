@@ -1,5 +1,6 @@
 import {
   CardView,
+  HorizontalDivider,
   Icon,
   PressableView,
   TextType,
@@ -29,21 +30,42 @@ const PlanView = () => {
             <PressableView
               onPress={() => console.log("Destination pressed", d.id)}
             >
-              <Icon name='building.2.fill'/>
-              <ThemedView>
-                <ThemedText type={TextType.Bold}>{d.place.name}</ThemedText>
+              <Icon name="building.2.fill" />
+              <ThemedView style={styles.destinationName}>
+                <ThemedText type={TextType.Bold} numberOfLines={2}>
+                  {d.place?.name}
+                </ThemedText>
                 <ThemedText type={TextType.Small}>
-                  {utcDate(d.startDate).format('DD MMM')}
-                  {' - '}
-                  {utcDate(d.endDate).format('DD MMM')}
+                  {utcDate(d.startDate).format("DD MMM")}
+                  {" - "}
+                  {utcDate(d.endDate).format("DD MMM")}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.destinationActivities}>
+                <ThemedText type={TextType.Bold}>
+                  {d.activities?.length ?? 0}
+                </ThemedText>
+                <ThemedText type={TextType.Small}>
+                  {(d.activities?.length ?? 0) === 1
+                    ? "Activity"
+                    : "Activities"}
+                </ThemedText>
+              </ThemedView>
+              <ThemedView style={styles.destinationNights}>
+                <ThemedText type={TextType.Bold}>
+                  {utcDate(d.endDate).diff(d.startDate, "days")}
+                </ThemedText>
+                <ThemedText type={TextType.Small}>
+                  {utcDate(d.endDate).diff(d.startDate, "days") === 1
+                    ? "Night"
+                    : "Nights"}
                 </ThemedText>
               </ThemedView>
             </PressableView>
+            {i !== destinations.length - 1 && <HorizontalDivider />}
           </ThemedView>
         ))}
       </CardView>
-
-      <ThemedText>This is the plan view component.</ThemedText>
     </ThemedView>
   );
 };
@@ -58,5 +80,17 @@ const styles = StyleSheet.create({
   },
   destinationsCard: {
     marginVertical: smallSpacing,
+  },
+  destinationName: {
+    flex: 2,
+    alignItems: "flex-start",
+  },
+  destinationActivities: {
+    flex: 1,
+    alignItems: "center",
+  },
+  destinationNights: {
+    flex: 1,
+    alignItems: "center",
   },
 });

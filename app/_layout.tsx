@@ -1,14 +1,9 @@
 import { MapView } from "@/components";
 import { ThemedView } from "@/components/ui";
-import {
-  getThemeProperty,
-  TripProvider,
-  useDimensions,
-  useThemeColor,
-} from "@/hooks";
+import { getThemeProperty, TripProvider, useThemeColor } from "@/hooks";
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Slot, usePathname } from "expo-router";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Animated, StyleSheet } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -16,11 +11,9 @@ export default function RootLayout() {
   const background = useThemeColor("background");
   const activeTint = useThemeColor("activeTint");
 
-  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [isTabletView, setIsTabletView] = useState(false);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
   const pathName = usePathname();
-
-  const { dimensions, onDimensionsChange } = useDimensions();
-  const useTabletView = dimensions.width >= 600;
 
   useEffect(() => {
     fadeAnim.setValue(0);
@@ -29,23 +22,28 @@ export default function RootLayout() {
       duration: 250,
       useNativeDriver: true,
     }).start();
-  }, [fadeAnim, pathName]);
+  }, [fadeAnim, pathName, isTabletView]);
 
   return (
     <TripProvider>
       <GestureHandlerRootView
+        key={isTabletView ? "tablet" : "mobile"}
         style={styles.container}
-        onLayout={onDimensionsChange}
+        onLayout={(event) =>
+          setIsTabletView(event.nativeEvent.layout.width >= 600)
+        }
       >
         <MapView />
 
-        {useTabletView && (
+        {isTabletView && (
           <ThemedView background style={[styles.sideSheet]}>
-            <Slot />
+            <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
+              <Slot />
+            </Animated.View>
           </ThemedView>
         )}
 
-        {!useTabletView && (
+        {!isTabletView && (
           <BottomSheet
             snapPoints={["20%", "50%", "90%"]}
             enableDynamicSizing={false}
@@ -89,7 +87,7 @@ const styles = StyleSheet.create({
     top: 50,
     bottom: 50,
     left: 50,
-
+    width: 350,
     flex: 1,
     borderRadius: borderRadius * 2,
   },
