@@ -59,10 +59,8 @@ export const TripProvider = ({ children }: TripProviderProps) => {
   useEffect(() => {
     const fetchTrip = async () => {
       try {
-        console.log("Fetching trip", tripId);
         setLoading(true);
         const responseTrip = await TripService.getTripDetails(tripId);
-        console.log("Fetched trip details", responseTrip);
         if (responseTrip) {
           setTrip(responseTrip);
         }

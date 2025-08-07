@@ -9,10 +9,19 @@ import {
 } from "@/components/ui";
 import { utcDate } from "@/helpers";
 import { getThemeProperty, useTripContext } from "@/hooks";
+import { useRouter } from "expo-router";
 import { StyleSheet } from "react-native";
 
 const PlanView = () => {
   const { trip, destinations } = useTripContext();
+  const router = useRouter();
+
+  const onDestinationSelected = (destinationId: string) => {
+    router.push({
+      pathname: "/views/DestinationDetailsView",
+      params: { destinationId: destinationId },
+    });
+  };
 
   return (
     <ThemedView style={styles.container}>
@@ -27,9 +36,7 @@ const PlanView = () => {
       <CardView style={styles.destinationsCard}>
         {destinations?.map((d, i) => (
           <ThemedView key={i}>
-            <PressableView
-              onPress={() => console.log("Destination pressed", d.id)}
-            >
+            <PressableView onPress={() => onDestinationSelected(d.id)}>
               <Icon name="building.2.fill" />
               <ThemedView style={styles.destinationName}>
                 <ThemedText type={TextType.Bold} numberOfLines={2}>
