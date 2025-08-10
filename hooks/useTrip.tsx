@@ -60,15 +60,29 @@ export const TripProvider = ({ children }: TripProviderProps) => {
     const fetchTrip = async () => {
       try {
         setLoading(true);
+
         const responseTrip = await TripService.getTripDetails(tripId);
-        if (responseTrip) {
-          setTrip(responseTrip);
+        if (!responseTrip) {
+          return;
         }
+        setTrip(responseTrip);
+
+        if (!responseTrip.destinations?.length) {
+          return;
+        }
+        let destinationsPromises = responseTrip.destinations.map(async (d) =>
+          TripService.getDestinationDetails(tripId, d.id)
+        );
+
+        let destinations = await Promise.all(destinationsPromises);
+        responseTrip.destinations = destinations.filter((d) => d !== null);
+        console.log(destinations)
       } catch (err) {
         console.log("Error", err);
       } finally {
       }
     };
+
     if (!trip && !loading) {
       fetchTrip();
     }
