@@ -10,11 +10,13 @@ import {
 import { utcDate } from "@/helpers";
 import { getThemeProperty, useTripContext } from "@/hooks";
 import { useRouter } from "expo-router";
+import { useTranslation } from "react-i18next";
 import { StyleSheet } from "react-native";
 
 const PlanView = () => {
   const { trip, destinations } = useTripContext();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const onDestinationSelected = (destinationId: string) => {
     router.push({
@@ -53,9 +55,7 @@ const PlanView = () => {
                   {d.activities?.length ?? 0}
                 </ThemedText>
                 <ThemedText type={TextType.Small}>
-                  {(d.activities?.length ?? 0) === 1
-                    ? "Activity"
-                    : "Activities"}
+                  {t("activity", { count: d.activities?.length ?? 0 })}
                 </ThemedText>
               </ThemedView>
               <ThemedView style={styles.destinationNights}>
@@ -63,9 +63,9 @@ const PlanView = () => {
                   {utcDate(d.endDate).diff(d.startDate, "days")}
                 </ThemedText>
                 <ThemedText type={TextType.Small}>
-                  {utcDate(d.endDate).diff(d.startDate, "days") === 1
-                    ? "Night"
-                    : "Nights"}
+                  {t("night", {
+                    count: utcDate(d.endDate).diff(d.startDate, "days"),
+                  })}
                 </ThemedText>
               </ThemedView>
             </PressableView>
