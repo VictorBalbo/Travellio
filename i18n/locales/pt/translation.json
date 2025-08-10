@@ -1,0 +1,21 @@
+{
+  "countNight": "{{count}} Noite",
+  "countNight_other": "{{count}} Noites",
+
+  "night": "Noite",
+  "night_other": "Noites",
+
+  "activity": "Atividade",
+  "activity_other": "Atividades",
+
+  "accommodation": "Acomodação em {{name}}",
+  "accommodation_other": "Acomodações em {{name}}",
+
+  "openOn": "Abrir no {{name}}",
+  "openReservation": "Abrir Reserva",
+
+  "arrivalFrom": "Chegada de {{name}}",
+  "arrivalHome": "Chegada de Casa",
+  "departureTo": "Saída para {{name}}",
+  "departureHome": "Saída para Casa"
+}

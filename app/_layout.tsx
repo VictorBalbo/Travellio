@@ -29,9 +29,7 @@ export default function RootLayout() {
       <GestureHandlerRootView
         key={isTabletView ? "tablet" : "mobile"}
         style={styles.container}
-        onLayout={(event) =>
-          setIsTabletView(event.nativeEvent.layout.width >= 600)
-        }
+        onLayout={(e) => setIsTabletView(e.nativeEvent.layout.width >= 600)}
       >
         <MapView />
 
@@ -47,21 +45,13 @@ export default function RootLayout() {
           <BottomSheet
             snapPoints={["20%", "50%", "90%"]}
             enableDynamicSizing={false}
-            backgroundStyle={[
-              styles.bottomSheet,
-              { backgroundColor: background },
+            backgroundStyle={{ backgroundColor: background }}
+            style={styles.bottomSheet}
+            handleStyle={[
+              styles.handleStyle,
+              { backgroundColor: background + "55" },
             ]}
-            handleStyle={{
-              backgroundColor: background + "90",
-              position: "absolute",
-              width: "100%",
-              borderTopLeftRadius: borderRadius * 3,
-              borderTopRightRadius: borderRadius * 3,
-              padding: smallSpacing,
-            }}
-            handleIndicatorStyle={{
-              backgroundColor: activeTint,
-            }}
+            handleIndicatorStyle={{ backgroundColor: activeTint }}
           >
             <BottomSheetScrollView>
               <Animated.View style={{ flex: 1, opacity: fadeAnim }}>
@@ -94,5 +84,11 @@ const styles = StyleSheet.create({
   bottomSheet: {
     borderTopLeftRadius: borderRadius * 2,
     borderTopRightRadius: borderRadius * 2,
+    overflow: "hidden",
+  },
+  handleStyle: {
+    position: "absolute",
+    width: "100%",
+    padding: smallSpacing,
   },
 });
